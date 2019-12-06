@@ -434,7 +434,6 @@ def md_to_wiki(doc):
     # Convert back to string.
     s = "".join(characters)
 
-    # ----- TE BE TESTED ----------------------------------------------------->
     # links
     s = re.sub(r'(.*)\[(.*)\]\((.*)\)', r'\1[\2|\3]', s, 0, re.M)
     # update local references to ancors
@@ -442,7 +441,6 @@ def md_to_wiki(doc):
     for m in re.finditer(pat, s):
         lnk = re.sub(r' ', '', m[1], 0)
         s = re.sub(escapeRegExp(m[0]), '[' + m[1] + '|#' + lnk + ']', s, 1)
-    # <-----------------------------------------------------------------------
 
     # manage file://... as attachments
     # the group between [ and | contains the file name without path
