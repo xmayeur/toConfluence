@@ -434,8 +434,15 @@ def md_to_wiki(doc):
     # Convert back to string.
     s = "".join(characters)
 
+    # ----- TE BE TESTED ----------------------------------------------------->
     # links
     s = re.sub(r'(.*)\[(.*)\]\((.*)\)', r'\1[\2|\3]', s, 0, re.M)
+    # update local references to ancors
+    pat = r'\[(.*?)\|#.*?\]'
+    for m in re.finditer(pat, s):
+        lnk = re.sub(r' ', '', m[1], 0)
+        s = re.sub(escapeRegExp(m[0]), '[' + m[1] + '|#' + lnk + ']', s, 1)
+    # <-----------------------------------------------------------------------
 
     # manage file://... as attachments
     # the group between [ and | contains the file name without path
@@ -459,7 +466,7 @@ def md_to_wiki(doc):
     # preceded by a file attachment corresponding to the code
     # pat = r'\[(.*)\.(.*)\^.*\]\n*```'
     pat = r'\[(.*?)\|\^(.*?)\.(.*?)\]\n*```'
-    rep = r'[\1|^\2.\3]\n\n{code:title=\1|linenumbers=true|language=text|firstline=0001|collapse=true}\n{code}'
+    rep = r'[\1|^\2.\3]\n\n{code:title=expand to see code for: \1|linenumbers=true|language=text|firstline=0001|collapse=true}\n{code}'
     s = re.sub(pat, rep, s, 0, re.M | re.VERBOSE)
     pat = r'\{code\}(.*?)```'
     # cb = re.search(pat, s, re.M|re.DOTALL).group(1)
@@ -468,7 +475,7 @@ def md_to_wiki(doc):
 
     # or just a simple code block
     pat = r'```(.*?)```'
-    rep = r'{code:title=code|linenumbers=true|firstline=0001|collapse=true}\n\1\n{code}'
+    rep = r'{code:title=expand to see code|linenumbers=true|firstline=0001|collapse=true}\n\1\n{code}'
     s = re.sub(pat, rep, s, 0, re.M | re.DOTALL)
 
     # find relationships paragraph with table and put it in an expand block
