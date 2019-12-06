@@ -4,7 +4,7 @@ block_cipher = None
 
 
 a = Analysis(['toconfluence.py'],
-             pathex=['C:\\Data\\Python Scripts\\toConfluence'],
+             pathex=['C:\\Users\\XY56RE\\SyncData\\toConfluence'],
              binaries=[],
              datas=[],
              hiddenimports=[],
