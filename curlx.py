@@ -1,13 +1,8 @@
 import json
-import os
 from io import BytesIO
 
+# Install wheel from https://www.lfd.uci.edu/~gohlke/pythonlibs/#pycurl
 import pycurl
-
-debug = False
-
-
-# import requests
 
 
 class Response:
@@ -35,17 +30,18 @@ class Response:
             return s
 
     def __repr__(self):
-        return self.body
+        return self.print()
 
 
 class CurlX:
 
-    def __init__(self, proxy=None, auth=None, cookies=None, verify=None):
+    def __init__(self, proxy=None, auth=None, cookies=None, verify=None, debug=False):
         self.buffer = None
         # initialize http streams
         self.c = pycurl.Curl()
         self.url = None
         self.response = Response()
+        self.debug = debug
 
         # set user & password for basic authentication
         self.set_auth(auth)
@@ -68,7 +64,8 @@ class CurlX:
         self.set_proxy(proxy)
         self.set_verify(verify)
         self.set_auth(auth)
-        if debug:
+        self.c.setopt(self.c.CUSTOMREQUEST, "GET")
+        if self.debug:
             self.c.setopt(self.c.VERBOSE, 1)
         try:
             self.c.perform()
@@ -88,7 +85,7 @@ class CurlX:
                 _r = '[' + _r.replace('}{', '},{') + ']'
             self.response.body = _r
         else:
-            self.response.body = ''
+            self.response.body = _body
         return self.response
 
     def put(self, url, data, headers=None, proxy=None, auth=None, cookies=None, verify=None):
@@ -99,6 +96,8 @@ class CurlX:
         self.set_proxy(proxy)
         self.set_verify(verify)
         self.set_auth(auth)
+        self.c.setopt(self.c.POSTFIELDS, "")
+        self.c.setopt(self.c.HTTPPOST, None)
 
         if headers:
             self.set_header(headers)
@@ -110,10 +109,11 @@ class CurlX:
                 _data = json.dumps(data)
             else:
                 _data = data
+            self.c.setopt(self.c.POSTFIELDS, _data)
 
         self.c.setopt(self.c.CUSTOMREQUEST, "PUT")
-        self.c.setopt(self.c.POSTFIELDS, _data)
-        if debug:
+
+        if self.debug:
             self.c.setopt(self.c.VERBOSE, 1)
 
         try:
@@ -145,6 +145,8 @@ class CurlX:
         self.set_proxy(proxy)
         self.set_verify(verify)
         self.set_auth(auth)
+        self.c.setopt(self.c.POSTFIELDS, "")
+        self.c.setopt(self.c.HTTPPOST, None)
         if headers:
             self.set_header(headers)
         else:
@@ -167,7 +169,7 @@ class CurlX:
                 self.c.setopt(self.c.HTTPPOST, list)
 
         self.c.setopt(self.c.CUSTOMREQUEST, "POST")
-        if debug:
+        if self.debug:
             self.c.setopt(self.c.VERBOSE, 1)
         try:
             self.c.perform()
@@ -228,8 +230,8 @@ class CurlX:
                 _u = auth["user"]
                 _p = auth["pwd"]
 
-            self.auth = "{0}:{1}".format(_u, _p)
-            self.c.setopt(self.c.USERPWD, self.auth)
+            _auth = "{0}:{1}".format(_u, _p)
+            self.c.setopt(self.c.USERPWD, _auth)
 
     def set_verify(self, verify):
         if verify:
@@ -260,26 +262,3 @@ class CurlX:
 
     def close(self):
         self.c.close()
-
-
-if __name__ == "__main__":
-
-    image = r'test_data\.images\WIP.png'
-    f = os.path.join(os.getcwd(), image)
-
-    if os.path.exists(f):
-        print(f)
-        pageId = '160579777'
-        url = 'https://orangesharing.com/rest/api/content/'
-        files = {'file': f, 'comment': 'ahh'}
-        data = "comment: aaa"
-        cookies = 'JSESSIONID=' + 'A288905F9105A925027905048EE37698'
-        attId = '160579778'
-        with CurlX(cookies=cookies) as requests:
-            r = requests.post(url + pageId + "/child/attachment/" + attId + '/data',
-                              headers=({'X-Atlassian-Token': 'no-check'}),
-                              files=files)
-            if r.status_code != 200:
-                print('error updating image update ' + str(r.status_code))
-                print(r.body)
-            r.print()

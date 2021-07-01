@@ -10,25 +10,30 @@ toConfluence is a command line only tool.
 ## Syntax
 ```
 usage: create or update Confluence page using wiki or markdown files
-toConfluence [-h] [-d DIRECTORY] [-id PAGEID] [-pid PARENTID] [-o] [-k SPACEKEY]
- [-m] [file]
-
+       [-h] [-d DIRECTORY] [-id PAGEID] [-pid PARENTID] [-o] [-k SPACEKEY]
+       [-m] [-t] [-v] [-D]
+       [file]
 
 positional arguments:
-  file                  the file to be uploaded
+  file                  handle the specified file
 
 optional arguments:
-  -h, --help            show this help message and _exit
+  -h, --help            show this help message and exit
   -d DIRECTORY, --directory DIRECTORY
-                        handle all .md files in the specified directory
+                        handle all .wi or .md files in the specified directory
   -id PAGEID, --pageid PAGEID
                         update using page ID instead of file name
   -pid PARENTID, --parentid PARENTID
                         specify the parent page ID
-  -o, --OrangeSharing   specify the OrangeSharing as Confluence site
+  -o, --OrangeSharing   specify the OrangeSharing as Confluence site and pass
+                        the JSESSIONID
   -k SPACEKEY, --spaceKey SPACEKEY
                         specify the Confluence Space key - default is 'EAO'
   -m, --markdown        force to convert file from markdown to Confluence wiki
+  -t, --test            test mode - print out debug information
+  -v, --version         display the application version
+  -D, --Download        Download a page with the title given as argument or
+                        referred by "--pageId nnn" argument
 ```
 
 ## Configuration file
@@ -37,21 +42,23 @@ File 'toConfluence.conf' is located under the following location:
 - Windows: under the path referred by the 'USERPROFILE' environment variable (e.g. C:\users\<username>)
 - Linux: under the home path '~/'
 
-format is as follow:
+Config file example:
+
 ```
-parentid = 725984102
-
-url = https://confluence.europe.intranet/rest/api/content/
-spaceKey = EAO
-
-url2 =  https://orangesharing.com/rest/api/content/
-spaceKey2 = CEA
-
 PROXY_URL = giba-proxy.wps.ing.net:8080
-email = my.ingemail@ing.com
-JSESSIONID = 9D77E876C8FBA12C964B89876EF89401
+
+[confluence]
+    url = https://confluence.ing.net/rest/api/content/
+    spaceKey = EAO
+    parentid = 118120651
+
+[orangesharing]
+    url = https://orangesharing.com/rest/api/content/
+    spaceKey = CEA
+    parentid = 193954419
+    email = xavier.mayeur@ing.com
+    JSESSIONID = C4388EC6D534C565834BC488ABB6CEFC
 ```
-where the url2 and spaceKey2 are used when the --OrangeSharing argument is invoked
 
 ## Authentication on Confluence (intranet)
 'toConfluence' requires to authenticate yourself on the ING network in order to pass through the firewalls and get access to Confluence.
