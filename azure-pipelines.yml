@@ -32,3 +32,20 @@ steps:
 #    pip install pytest pytest-azurepipelines
 #    pytest
 #  displayName: 'pytest'
+- task: CopyFiles@2
+  inputs:
+    Contents: '**/dist/toconfluence.exe'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    CleanTargetFolder: true
+    OverWrite: true
+    flattenFolders: true
+
+- task: UniversalPackages@0
+  inputs:
+    command: 'publish'
+    publishDirectory: '$(Build.ArtifactStagingDirectory)'
+    feedsToUsePublish: 'internal'
+    vstsFeedPublish: 'f55d8f82-468c-48a4-8e4b-6a4e99d3e101/bef723e1-71ae-4723-a9c1-34cebb7f26d8'
+    vstsFeedPackagePublish: 'toconfluence'
+    versionOption: 'patch'
+    packagePublishDescription: 'A program to upload markdown files & attachment to a Confluence page'
