@@ -1,3 +1,10 @@
 /dist/
 /dist1/
 /build/
+/venv/
+venv/
+/.idea/
+/tmp/
+tmp/
+.idea/
+

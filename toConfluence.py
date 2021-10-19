@@ -16,6 +16,7 @@
 # --> TO DO <---
 # replace print(...) by log(...) function
 
+
 import argparse
 import hashlib
 import json
@@ -33,7 +34,7 @@ from markdownify import MarkdownConverter
 
 from curlx import CurlX, Response
 
-version = '2.3'
+version = '2.3.1'
 
 #
 #   When including the RSACipher module, user password may be encrypted and stored in the config file
@@ -478,7 +479,7 @@ def md_to_wiki(doc):
     s = doc
 
     # escape curly braces to avoid entering Confluence macros
-    s = re.sub(r'{(.*)\}', r"\\{\1\\}", s, 0, re.M)
+    s = re.sub(r'{', r"\\{", s, 0, re.M)
 
     # replace color tags on paragraph
     s = re.sub(r'<span style="color:(.*);">(.*)</span>', r'{color:\1}\2{color}', s, 0, re.M)
