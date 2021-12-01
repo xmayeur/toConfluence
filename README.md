@@ -50,31 +50,14 @@ PROXY_URL = <ProxyURL>>:8080
 [confluence]
     url = https://<confluenceURL>/rest/api/content/
     spaceKey = <SpaceKey>
-    parentid = 118120651
+    parentid = 123456789
 
-[orangesharing]
-    url = https://orangesharing.com/rest/api/content/
-    spaceKey = CEA
-    parentid = 193954419
-    email = <my e-mail>>
-    JSESSIONID = 
 ```
 
 ## Authentication on Confluence (intranet)
 'toConfluence' requires to authenticate yourself on the Office network in order to pass through the firewalls and get access to Confluence.
 User password will be asked each time 'toConfluence' is called and is not cached.
-It is possible, but not recommended, to set the environment variable PWD to your actual password, should you execute many consecutive uploads.
-Don't forget to remove it after the operations.
 
-## Authentication with OrangeSharing
-OrangeSharing use Microsoft Azure Active Directory to authenticate users. The 'toConfluence' tool is not yet able to 
-fully integrate with Azure Active Directory, so the following workaround is in place:
-- Log into OrangeSharing via the web browser.
-- When logged,  press F12 or go to the 'Developer Tool' menu. Search for 'https://orangesharing.com' in the cookies list, 
-under the Application menu. Copy the JSESSIONID token to the clipboard - past it into the toConfluence.conf file
-as shown above, so that the session can be used until token expiration.  
-- Start the 'toConfluence' tool with the '-o' option
-- If you are on the ING Intranet, you will be asked to enter your CEDS password in order to pass the GIBA Proxy, requiring authentication
 
 ## Special features in the document conversion
 
@@ -90,6 +73,6 @@ as shown above, so that the session can be used until token expiration.
 ## Release notes
 
 * version 2.0x
-    * use the 'pyCurl' library instead of 'requests' to pass through GIBA authentication
+    * use the 'pyCurl' library instead of 'requests' to pass through Proxy authentication
     * calculate md5 hash to document body, file & image attachments to verify whether new version should be uploaded or not
        
