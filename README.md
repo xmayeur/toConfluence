@@ -45,23 +45,23 @@ File 'toConfluence.conf' is located under the following location:
 Config file example:
 
 ```
-PROXY_URL = giba-proxy.wps.ing.net:8080
+PROXY_URL = <ProxyURL>>:8080
 
 [confluence]
-    url = https://confluence.ing.net/rest/api/content/
-    spaceKey = EAO
+    url = https://<confluenceURL>/rest/api/content/
+    spaceKey = <SpaceKey>
     parentid = 118120651
 
 [orangesharing]
     url = https://orangesharing.com/rest/api/content/
     spaceKey = CEA
     parentid = 193954419
-    email = xavier.mayeur@ing.com
-    JSESSIONID = C4388EC6D534C565834BC488ABB6CEFC
+    email = <my e-mail>>
+    JSESSIONID = 
 ```
 
 ## Authentication on Confluence (intranet)
-'toConfluence' requires to authenticate yourself on the ING network in order to pass through the firewalls and get access to Confluence.
+'toConfluence' requires to authenticate yourself on the Office network in order to pass through the firewalls and get access to Confluence.
 User password will be asked each time 'toConfluence' is called and is not cached.
 It is possible, but not recommended, to set the environment variable PWD to your actual password, should you execute many consecutive uploads.
 Don't forget to remove it after the operations.
