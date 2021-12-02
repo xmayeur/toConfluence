@@ -25,8 +25,6 @@ optional arguments:
                         update using page ID instead of file name
   -pid PARENTID, --parentid PARENTID
                         specify the parent page ID
-  -o, --OrangeSharing   specify the OrangeSharing as Confluence site and pass
-                        the JSESSIONID
   -k SPACEKEY, --spaceKey SPACEKEY
                         specify the Confluence Space key - default is 'EAO'
   -m, --markdown        force to convert file from markdown to Confluence wiki
